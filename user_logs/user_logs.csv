@@ -2,3 +2,4 @@ user_id,news_id,action,timestamp ,timestamp
 user_1,11,like,,2025-07-26T19:57:56.769923
 user_1,2,like,,2025-07-26T19:58:08.811589
 user_1,1,like,,2025-07-26T19:59:56.856538
+user_1,4,like,,2025-07-26T20:16:35.317862
