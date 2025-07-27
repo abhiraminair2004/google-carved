@@ -28,10 +28,32 @@ def plot_topic_wordcloud(data):
     """Generate a word cloud for news topics."""
     from wordcloud import WordCloud
     import matplotlib.pyplot as plt
-    text = ' '.join(data['topic'].astype(str))
+    
+    # Check if topic column exists, use category as fallback
+    text = ''
+    if 'topic' in data.columns and not data['topic'].empty:
+        # Filter out numeric-only topics
+        topics = data['topic'].astype(str)
+        # Only use non-numeric topics
+        topics = topics[~topics.str.match(r'^\d+$')]
+        if not topics.empty:
+            text = ' '.join(topics)
+    
+    # If no valid topics, try using category
+    if not text and 'category' in data.columns and not data['category'].empty:
+        text = ' '.join(data['category'].astype(str))
+    
+    # If still no text, use default message
+    if not text:
+        text = 'No topics available'
+    
+    # Ensure there's at least one word to generate the cloud
+    if len(text.split()) < 1:
+        text = 'No topics available'
+    
     fig = plt.figure(figsize=(10, 5))
     wc = WordCloud(width=800, height=400, background_color='white').generate(text)
     plt.imshow(wc, interpolation='bilinear')
     plt.axis('off')
     plt.title('Topic Word Cloud')
-    return fig 
+    return fig

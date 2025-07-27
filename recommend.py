@@ -67,22 +67,43 @@ def collaborative_recommend(user_id, news_df, logs_df, top_n=5):
 # --- Content-Based Filtering ---
 def content_based_recommend(user_id, news_df, user_logs, top_n=5):
     prefs = get_user_preferences(user_logs, news_df)
+    
+    # Ensure required columns exist
+    news_df = news_df.copy()
+    if 'date' not in news_df.columns:
+        import datetime
+        news_df['date'] = datetime.datetime.now().strftime('%Y-%m-%d')
+    
     if not prefs:
         return news_df.sort_values('date', ascending=False).head(top_n), ["Most recent articles"] * top_n
-    news_df = news_df.copy()
-    news_df['content'] = news_df['topic'].astype(str) + ' ' + news_df['category'].astype(str)
+    
+    # Create content field for TF-IDF
+    if 'topic' not in news_df.columns:
+        news_df['topic'] = news_df['category']
+    
+    # Combine features for content-based filtering
+    news_df['content_features'] = news_df['topic'].astype(str) + ' ' + news_df['category'].astype(str)
+    
+    # Apply TF-IDF
     tfidf = TfidfVectorizer()
-    tfidf_matrix = tfidf.fit_transform(news_df['content'])
+    tfidf_matrix = tfidf.fit_transform(news_df['content_features'])
     user_profile = ' '.join(prefs)
     user_vec = tfidf.transform([user_profile])
     cosine_sim = linear_kernel(user_vec, tfidf_matrix).flatten()
+    
+    # Filter out seen articles
     seen_ids = user_logs['news_id'].astype(int).tolist()
     news_df['score'] = cosine_sim
     recs = news_df[~news_df.index.isin(seen_ids)].sort_values('score', ascending=False).head(top_n)
+    
+    # Generate explanations
     explanations = [f"Matched topics/categories: {prefs}" for _ in range(len(recs))]
+    
+    # Fallback to recent articles if no recommendations
     if recs.empty:
         recs = news_df.sort_values('date', ascending=False).head(top_n)
         explanations = ["Most recent articles"] * top_n
+        
     return recs, explanations
 
 # --- Hybrid Recommendation ---
@@ -102,4 +123,4 @@ def hybrid_recommend(user_id, news_df, top_n=5):
             return recs, explanations
         return collab_recs, explanations
     # Fallback to content-based
-    return content_based_recommend(user_id, news_df, user_logs, top_n) 
+    return content_based_recommend(user_id, news_df, user_logs, top_n)

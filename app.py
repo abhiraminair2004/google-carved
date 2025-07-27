@@ -20,8 +20,30 @@ NEWSAPI_URL = 'https://newsapi.org/v2/top-headlines?country=us&pageSize=10&apiKe
 
 # Load and clean data
 def load_data():
-    df = pd.read_csv(NEWS_PATH)
+    try:
+        # Try with tab delimiter and Python engine to handle inconsistent field counts
+        df = pd.read_csv(NEWS_PATH, delimiter='\t', engine='python', on_bad_lines='skip')
+    except Exception as e:
+        st.error(f"Error loading data with tab delimiter: {e}")
+        try:
+            # Fallback to C engine with flexible field count
+            df = pd.read_csv(NEWS_PATH, delimiter='\t', engine='c', on_bad_lines='skip')
+        except Exception as e2:
+            st.error(f"Error loading data with fallback method: {e2}")
+            # Last resort: try to infer delimiter
+            try:
+                df = pd.read_csv(NEWS_PATH, sep=None, engine='python', on_bad_lines='skip')
+            except Exception as e3:
+                st.error(f"Failed to load data: {e3}")
+                # Return empty DataFrame with expected columns
+                return pd.DataFrame(columns=['category', 'title', 'summary', 'topic', 'date'])
+    
     df = clean_news_data(df)
+    # Ensure all required columns exist
+    required_columns = ['category', 'title', 'summary', 'topic', 'date']
+    for col in required_columns:
+        if col not in df.columns:
+            st.error(f"Missing required column: {col}")
     df = df.reset_index(drop=True)
     return df
 
@@ -54,21 +76,63 @@ def carved_dashboard(news_df, logs_df):
     liked = user_logs[user_logs['action'] == 'like']
     most_liked_cat = None
     top_topics = []
+    
     if not liked.empty:
-        liked_news = news_df.iloc[liked['news_id'].astype(int)]
-        most_liked_cat = liked_news['category'].mode()[0] if not liked_news['category'].empty else None
-        top_topics = liked_news['topic'].value_counts().head(3).index.tolist()
+        # Get indices of liked news, handling potential errors
+        try:
+            # Get the most recent liked news first
+            liked = liked.sort_values('timestamp', ascending=False)
+            liked_indices = liked['news_id'].astype(int).tolist()
+            
+            # Filter only valid indices
+            valid_indices = [idx for idx in liked_indices if idx < len(news_df)]
+            if valid_indices:
+                liked_news = news_df.iloc[valid_indices]
+                
+                # Get most liked category if category column exists
+                if 'category' in liked_news.columns and not liked_news['category'].empty:
+                    # Use the most recent liked category (first row after sorting)
+                    most_liked_cat = liked_news['category'].iloc[0]
+                
+                # Get top topics if topic column exists
+                if 'topic' in liked_news.columns:
+                    # Filter out numeric-only topics
+                    topics = liked_news['topic'].astype(str)
+                    non_numeric_topics = topics[~topics.str.match(r'^\d+$')]
+                    
+                    if not non_numeric_topics.empty:
+                        top_topics = non_numeric_topics.value_counts().head(3).index.tolist()
+                    elif 'category' in liked_news.columns:  # Use category as fallback
+                        top_topics = liked_news['category'].value_counts().head(3).index.tolist()
+                elif 'category' in liked_news.columns:  # Use category as fallback
+                    top_topics = liked_news['category'].value_counts().head(3).index.tolist()
+        except Exception as e:
+            st.warning(f"Error processing liked news: {e}")
+    
     col1, col2, col3 = st.columns(3)
     col1.metric('Total News Seen', total_seen)
     col2.metric('Most Liked Category', most_liked_cat if most_liked_cat else '-')
     col3.metric('Top 3 Topics', ', '.join(top_topics) if top_topics else '-')
     st.markdown('---')
     st.write('**Your News Preferences Visualized:**')
-    fig_dashboard = plot_category_bar(news_df)
-    st.pyplot(fig_dashboard)
-    st.plotly_chart(plot_category_pie(news_df))
-    fig_wordcloud = plot_topic_wordcloud(news_df)
-    st.pyplot(fig_wordcloud)
+    
+    # Generate visualizations
+    try:
+        fig_dashboard = plot_category_bar(news_df)
+        st.pyplot(fig_dashboard)
+    except Exception as e:
+        st.warning(f"Could not generate category bar chart: {e}")
+    
+    try:
+        st.plotly_chart(plot_category_pie(news_df))
+    except Exception as e:
+        st.warning(f"Could not generate category pie chart: {e}")
+    
+    try:
+        fig_wordcloud = plot_topic_wordcloud(news_df)
+        st.pyplot(fig_wordcloud)
+    except Exception as e:
+        st.warning(f"Could not generate topic word cloud: {e}")
 
 # --- Main App ---
 def main():
@@ -87,18 +151,56 @@ def main():
     liked = user_logs[user_logs['action'] == 'like']
     most_liked_cat = None
     top_topics = []
+    
     if not liked.empty:
-        liked_news = news_df.iloc[liked['news_id'].astype(int)]
-        most_liked_cat = liked_news['category'].mode()[0] if not liked_news['category'].empty else None
-        top_topics = liked_news['topic'].value_counts().head(3).index.tolist()
+        # Get indices of liked news, handling potential errors
+        try:
+            # Get the most recent liked news first
+            liked = liked.sort_values('timestamp', ascending=False)
+            liked_indices = liked['news_id'].astype(int).tolist()
+            
+            # Filter only valid indices
+            valid_indices = [idx for idx in liked_indices if idx < len(news_df)]
+            if valid_indices:
+                liked_news = news_df.iloc[valid_indices]
+                
+                # Get most liked category if category column exists
+                if 'category' in liked_news.columns and not liked_news['category'].empty:
+                    # Use the most recent liked category (first row after sorting)
+                    most_liked_cat = liked_news['category'].iloc[0]
+                
+                # Get top topics if topic column exists
+                if 'topic' in liked_news.columns:
+                    # Filter out numeric-only topics
+                    topics = liked_news['topic'].astype(str)
+                    non_numeric_topics = topics[~topics.str.match(r'^\d+$')]
+                    
+                    if not non_numeric_topics.empty:
+                        top_topics = non_numeric_topics.value_counts().head(3).index.tolist()
+                    elif 'category' in liked_news.columns:  # Use category as fallback
+                        top_topics = liked_news['category'].value_counts().head(3).index.tolist()
+                elif 'category' in liked_news.columns:  # Use category as fallback
+                    top_topics = liked_news['category'].value_counts().head(3).index.tolist()
+        except Exception as e:
+            st.sidebar.warning(f"Error processing liked news: {e}")
+    
     st.sidebar.metric('Total News Seen', total_seen)
     st.sidebar.metric('Most Liked Category', most_liked_cat if most_liked_cat else '-')
     st.sidebar.metric('Top 3 Topics', ', '.join(top_topics) if top_topics else '-')
     st.sidebar.markdown('---')
     st.sidebar.write('**Visualizations:**')
-    fig_sidebar = plot_category_bar(news_df)
-    st.sidebar.pyplot(fig_sidebar)
-    st.sidebar.plotly_chart(plot_category_pie(news_df))
+    
+    # Generate visualizations
+    try:
+        fig_sidebar = plot_category_bar(news_df)
+        st.sidebar.pyplot(fig_sidebar)
+    except Exception as e:
+        st.sidebar.warning(f"Could not generate category bar chart: {e}")
+    
+    try:
+        st.sidebar.plotly_chart(plot_category_pie(news_df))
+    except Exception as e:
+        st.sidebar.warning(f"Could not generate category pie chart: {e}")
 
     # Carved Dashboard
     carved_dashboard(news_df, logs_df)
@@ -137,4 +239,4 @@ def main():
             st.sidebar.success(f'Fetched and merged {len(df_api)} new articles! Refresh the page to see updates.')
 
 if __name__ == '__main__':
-    main() 
+    main()
