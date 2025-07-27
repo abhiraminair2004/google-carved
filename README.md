@@ -26,7 +26,7 @@
 
 ---
 
-## 👩💻 Tech Stack
+## 💻 Tech Stack
 
 ### 💻 Frontend
 - **Streamlit**: Python-based web framework used to build the interactive user interface with minimal code.
