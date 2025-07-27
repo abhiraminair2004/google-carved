@@ -116,23 +116,29 @@ def carved_dashboard(news_df, logs_df):
     st.markdown('---')
     st.write('**Your News Preferences Visualized:**')
     
-    # Generate visualizations
-    try:
-        fig_dashboard = plot_category_bar(news_df)
-        st.pyplot(fig_dashboard)
-    except Exception as e:
-        st.warning(f"Could not generate category bar chart: {e}")
-    
-    try:
-        st.plotly_chart(plot_category_pie(news_df))
-    except Exception as e:
-        st.warning(f"Could not generate category pie chart: {e}")
-    
-    try:
-        fig_wordcloud = plot_topic_wordcloud(news_df)
-        st.pyplot(fig_wordcloud)
-    except Exception as e:
-        st.warning(f"Could not generate topic word cloud: {e}")
+    # Generate visualizations based on user's liked articles
+    if valid_indices and not liked_news.empty:
+        try:
+            fig_dashboard = plot_category_bar(liked_news)
+            st.pyplot(fig_dashboard)
+            st.caption("Category distribution of your liked articles")
+        except Exception as e:
+            st.warning(f"Could not generate category bar chart: {e}")
+        
+        try:
+            st.plotly_chart(plot_category_pie(liked_news))
+            st.caption("Proportion of categories you've liked")
+        except Exception as e:
+            st.warning(f"Could not generate category pie chart: {e}")
+        
+        try:
+            fig_wordcloud = plot_topic_wordcloud(liked_news)
+            st.pyplot(fig_wordcloud)
+            st.caption("Word cloud of your favorite topics")
+        except Exception as e:
+            st.warning(f"Could not generate topic word cloud: {e}")
+    else:
+        st.info("Like some articles to see your news preferences visualized")
 
 # --- Main App ---
 def main():
@@ -190,15 +196,23 @@ def main():
     st.sidebar.markdown('---')
     st.sidebar.write('**Visualizations:**')
     
-    # Generate visualizations
+    # Generate visualizations based on user's liked articles
     try:
-        fig_sidebar = plot_category_bar(news_df)
-        st.sidebar.pyplot(fig_sidebar)
+        if valid_indices and not liked_news.empty:
+            fig_sidebar = plot_category_bar(liked_news)
+            st.sidebar.pyplot(fig_sidebar)
+            st.sidebar.caption("Category distribution of your liked articles")
+        else:
+            st.sidebar.info("Like some articles to see your category preferences")
     except Exception as e:
         st.sidebar.warning(f"Could not generate category bar chart: {e}")
     
     try:
-        st.sidebar.plotly_chart(plot_category_pie(news_df))
+        if valid_indices and not liked_news.empty:
+            st.sidebar.plotly_chart(plot_category_pie(liked_news))
+            st.sidebar.caption("Proportion of categories you've liked")
+        else:
+            st.sidebar.info("Like some articles to see your category distribution")
     except Exception as e:
         st.sidebar.warning(f"Could not generate category pie chart: {e}")
 
