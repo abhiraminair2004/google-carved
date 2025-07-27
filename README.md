@@ -38,21 +38,6 @@
 
 ---
 
-## 📁 Project Structure
-
-google-carved/
-├── app.py
-├── data/
-│   └── news_data.csv
-├── modules/
-│   ├── clean_news_data.py
-│   ├── model.py
-│   └── visualizer.py
-├── requirements.txt
-└── README.md
-
----
-
 ## 🛠️ Local Setup
 
 ### 1. Clone the repository
