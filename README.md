@@ -1,47 +1,67 @@
-# 🧠 Google Carved – Personalized ML News Recommender
+# Google Carved – Personalized News Recommender
 
-**Google Carved** is a full-stack, machine learning-powered news recommendation web app inspired by **Google Discover** and **Spotify Wrapped**. It curates news articles based on your preferences and evolves dynamically based on your likes and dislikes. The app visualizes your top categories and delivers a personalized discovery experience.
+**Google Carved** is a machine learning-based news recommendation app inspired by Google Discover and Spotify Wrapped. It lets users interact with news cards, and based on their likes/dislikes, it recommends more personalized content. The app includes visual feedback through charts and lists of recently liked articles.
 
-<img width="100%" alt="Google Carved Screenshot" src="https://github.com/user-attachments/assets/your-screenshot-link.png" />
+<img width="1920" height="884" alt="image" src="https://github.com/user-attachments/assets/c7bcd106-b0fe-4c5b-85b0-6b407297a8e9" />
 
 ---
 
 ## 🌐 Live Demo
 
-- **📲 Web App**: [https://carvednews.streamlit.app](https://carvednews.streamlit.app)
+- **App**: [https://carvednews.streamlit.app](https://carvednews.streamlit.app)
 
 ---
 
-## 🚀 Features
+## 🧠 Features
 
-### 📄 User Experience
-- View personalized news cards using a recommendation model
-- Double-tap to "like" and get more of that type
-- Swipe up to discard articles you’re not interested in
-- Visual analytics of liked categories (Pie/Bar Charts)
-- Recent likes listed and analyzed
-- Clean, responsive, and fast UI with Streamlit
+### 🔍 Personalized News Discovery
+- Browse categorized news cards
+- Press heart to "like" a card and receive similar content or Cross to discard it
+- Visualize your top liked categories using Pie & Bar charts
 
-### 🤖 Under the Hood
-- Machine learning (Scikit-learn) for category prediction
-- Data cleaning, preprocessing, and classification logic
-- Real-time storage of user preferences using Google Sheets API
-- Interactive visuals built with Seaborn & Matplotlib
-- Cloud-hosted via Streamlit Cloud (Free tier)
+### 📊 Visual Feedback
+- Bar chart and pie chart showing like frequency by category
+- Summary text about your preferences
+- Simple, clean UI using Streamlit
 
 ---
 
 ## 🧑‍💻 Tech Stack
 
-| Layer        | Technology               |
-|--------------|---------------------------|
-| Frontend     | Streamlit (Python UI)     |
-| Backend/ML   | Scikit-learn, Pandas, NumPy |
-| Visualization| Matplotlib, Seaborn        |
-| Storage      | Google Sheets API         |
-| Hosting      | Streamlit Cloud           |
+| Layer        | Tech Used                   |
+|--------------|-----------------------------|
+| UI           | Streamlit (Python)          |
+| ML Model     | Scikit-learn, Pandas, NumPy |
+| Visualization| Seaborn, Matplotlib         |
+| Deployment   | Streamlit Cloud             |
+| Storage      | In-memory (session/local)   |
 
 ---
 
 ## 📁 Project Structure
 
+google-carved/
+├── app.py # Main Streamlit app
+├── data/
+│ └── news_data.csv # News data used for recommendations
+├── modules/
+│ ├── clean_news_data.py # Cleans and preprocesses data
+│ ├── model.py # Simple ML model (e.g., Naive Bayes)
+│ └── visualizer.py # Generates bar/pie charts
+├── assets/ # Optional: image files or screenshots
+├── requirements.txt
+└── README.md
+
+yaml
+Copy
+Edit
+
+---
+
+## 🛠️ Local Setup
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/your-username/google-carved.git
+cd google-carved
