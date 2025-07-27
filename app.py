@@ -143,7 +143,7 @@ def carved_dashboard(news_df, logs_df):
 # --- Main App ---
 def main():
     st.set_page_config(page_title='Google Carved', layout='wide')
-    st.title('📰 Google Carved')
+    st.title('Google Carved')
     st.caption('A personalized news recommendation system inspired by Google Discover & Spotify Wrapped.')
 
     # Load data
