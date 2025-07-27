@@ -41,20 +41,15 @@
 ## 📁 Project Structure
 
 google-carved/
-├── app.py # Main Streamlit app
+├── app.py
 ├── data/
-│ └── news_data.csv # News data used for recommendations
+│   └── news_data.csv
 ├── modules/
-│ ├── clean_news_data.py # Cleans and preprocesses data
-│ ├── model.py # Simple ML model (e.g., Naive Bayes)
-│ └── visualizer.py # Generates bar/pie charts
-├── assets/ # Optional: image files or screenshots
+│   ├── clean_news_data.py
+│   ├── model.py
+│   └── visualizer.py
 ├── requirements.txt
 └── README.md
-
-yaml
-Copy
-Edit
 
 ---
 
