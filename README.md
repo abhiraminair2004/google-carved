@@ -26,15 +26,23 @@
 
 ---
 
-## 🧑‍💻 Tech Stack
+## 👩💻 Tech Stack
 
-| Layer        | Tech Used                   |
-|--------------|-----------------------------|
-| UI           | Streamlit (Python)          |
-| ML Model     | Scikit-learn, Pandas, NumPy |
-| Visualization| Seaborn, Matplotlib         |
-| Deployment   | Streamlit Cloud             |
-| Storage      | In-memory (session/local)   |
+### 💻 Frontend
+- **Streamlit**: Python-based web framework used to build the interactive user interface with minimal code.
+- **Pandas**: For data loading and preprocessing.
+- **Matplotlib & Seaborn**: For generating user-friendly visualizations of user preferences and content trends.
+
+### 🧠 Machine Learning
+- **Scikit-learn**: Used for implementing content-based recommendation logic (e.g., TF-IDF vectorization, cosine similarity).
+- **Natural Language Processing (NLP)**: Applied for vectorizing and comparing article content.
+
+### 🗂️ Data Handling
+- **CSV File**: News dataset stored locally in `news_dataset.csv` for simplicity and fast prototyping.
+
+### 🌐 Deployment
+- **Streamlit Cloud**: Free and fast deployment platform for Streamlit apps.
+- **GitHub**: Version control and project hosting.
 
 ---
 
