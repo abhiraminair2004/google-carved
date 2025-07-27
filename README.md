@@ -1,60 +1,47 @@
-# Google Carved
+# 🧠 Google Carved – Personalized ML News Recommender
 
-A personalized news recommendation system inspired by Google Discover and Spotify Wrapped, built with Python and Streamlit.
+**Google Carved** is a full-stack, machine learning-powered news recommendation web app inspired by **Google Discover** and **Spotify Wrapped**. It curates news articles based on your preferences and evolves dynamically based on your likes and dislikes. The app visualizes your top categories and delivers a personalized discovery experience.
 
-## Features
-- Personalized news feed using content-based filtering (TF-IDF)
-- Like/Discard news to improve recommendations
-- User analytics: most liked category, top topics, total news seen
-- Visualizations: bar chart, pie chart, word cloud
-- "Carved Dashboard" (Spotify Wrapped style) at startup
-- Responsive, interactive UI with Streamlit widgets
-- Modular, beginner-friendly code
-
-## File Structure
-```
-app.py                  # Main Streamlit app
-recommend.py            # Recommendation logic
-utils/cleaner.py        # Data cleaning functions
-utils/visualizer.py     # Visualization utilities
-requirements.txt        # Dependencies
-README.md               # This file
-data/news_dataset.csv   # Dummy news dataset
-user_logs/user_logs.csv # User interaction logs
-```
-
-## Setup & Usage
-1. **Install dependencies:**
-   ```bash
-   pip install -r requirements.txt
-   ```
-2. **Run the app locally:**
-   ```bash
-   streamlit run app.py
-   ```
-3. **Interact:**
-   - Like or discard news to improve your feed
-   - View analytics and visualizations in the sidebar and dashboard
-
-## Streamlit Cloud Deployment
-- Upload all files to your Streamlit Cloud workspace
-- Ensure `requirements.txt` is present
-- Set `app.py` as the entry point
-- App will run at your Streamlit Cloud URL
-
-## Notes
-- Uses dummy news data for demonstration
-- All user logs are stored in `user_logs/user_logs.csv`
-- Modular code for easy extension
-
-## Dependencies
-- streamlit
-- pandas
-- scikit-learn
-- matplotlib
-- seaborn
-- plotly
-- wordcloud
+<img width="100%" alt="Google Carved Screenshot" src="https://github.com/user-attachments/assets/your-screenshot-link.png" />
 
 ---
-Enjoy your personalized news experience with Google Carved! 
+
+## 🌐 Live Demo
+
+- **📲 Web App**: [https://carvednews.streamlit.app](https://carvednews.streamlit.app)
+
+---
+
+## 🚀 Features
+
+### 📄 User Experience
+- View personalized news cards using a recommendation model
+- Double-tap to "like" and get more of that type
+- Swipe up to discard articles you’re not interested in
+- Visual analytics of liked categories (Pie/Bar Charts)
+- Recent likes listed and analyzed
+- Clean, responsive, and fast UI with Streamlit
+
+### 🤖 Under the Hood
+- Machine learning (Scikit-learn) for category prediction
+- Data cleaning, preprocessing, and classification logic
+- Real-time storage of user preferences using Google Sheets API
+- Interactive visuals built with Seaborn & Matplotlib
+- Cloud-hosted via Streamlit Cloud (Free tier)
+
+---
+
+## 🧑‍💻 Tech Stack
+
+| Layer        | Technology               |
+|--------------|---------------------------|
+| Frontend     | Streamlit (Python UI)     |
+| Backend/ML   | Scikit-learn, Pandas, NumPy |
+| Visualization| Matplotlib, Seaborn        |
+| Storage      | Google Sheets API         |
+| Hosting      | Streamlit Cloud           |
+
+---
+
+## 📁 Project Structure
+
