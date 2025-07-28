@@ -118,8 +118,3 @@ These are updated live based on user interaction.
 
 ---
 
-## 🙋‍♀️ Author
-
-Made with ❤️ by Abhirami 
-Inspired by Google Discover and Spotify Wrapped.
-
