@@ -4,6 +4,7 @@
 
 Built using **Python**, **Streamlit**, and **Scikit-learn**, it’s designed to be fast, lightweight, and interactive.
 
+
 <img width="1920" height="884" alt="image" src="https://github.com/user-attachments/assets/c7bcd106-b0fe-4c5b-85b0-6b407297a8e9" />
 
 ---
