@@ -1,8 +1,9 @@
-# 📰 Google Carved
+# Google Carved
 
 **Google Carved** is a personalized news recommendation system inspired by **Google Discover** and **Spotify Wrapped**. It uses **content-based filtering (TF-IDF + cosine similarity)** to recommend news articles based on user preferences, and offers a rich visual dashboard to analyze those preferences.
 
 Built using **Python**, **Streamlit**, and **Scikit-learn**, it’s designed to be fast, lightweight, and interactive.
+
 <img width="1920" height="884" alt="image" src="https://github.com/user-attachments/assets/c7bcd106-b0fe-4c5b-85b0-6b407297a8e9" />
 
 ---
@@ -116,14 +117,8 @@ These are updated live based on user interaction.
 
 ---
 
-## 📄 License
-
-This project is open-source and available under the [MIT License](LICENSE).
-
----
-
 ## 🙋‍♀️ Author
 
-Made with ❤️ by [Your Name]  
+Made with ❤️ by Abhirami 
 Inspired by Google Discover and Spotify Wrapped.
 
